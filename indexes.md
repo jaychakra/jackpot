@@ -77,9 +77,23 @@ db.people.find({birthday: {$gte: ISODate("2016-01-15")}}).limit(1).skip(10).expl
 
 db.people.dropIndex({birthday:1})
 ```
-Still there needs to be index traversal. This could be eliminated by using sort column
+Still, there needs to be index traversal. This could be eliminated by using sort column
 
 # Compound Indexes & ESR Rule
+* Compound Index can be used to satisfy multiple queries
+* Order of keys in indexes are important
+* Selectivity, most selectivity at the earliest point in the B-Tree
+    * Ex: Query like {a:1, status: true}, you have to choose just one index, which one will you choose
+* ESR 
+    * ESR can't be fool proof, it could be a general recommendation but it is always advisable to test it through the explain plan before proceeding
+* Index Statistics
+    * indexStats() command
+* Covered Queries
+    * It will not show a fetch stage
+
+* Selectivity + ESR
+
+
 ## Case of redundant indexes
 ### show by using hint
 
