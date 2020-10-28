@@ -1,6 +1,8 @@
 # Bootstrapping
-mongoimport ~/Downloads/people.json
-mongoimport ~/Downloads/restaurants.json
+mongoimport ./DataSet/people.json
+mongoimport ./DataSet/restaurants.json
+
+
 
 # Explain Plan
 * Is your query using the index you expect
@@ -102,7 +104,54 @@ Still, there needs to be index traversal. This could be eliminated by using sort
 
 # Predicate Searches with regex
 
+Simple RegEx
+```
+db.people.find({"last_name":/u/}, {_id:0, last_name:1}).explain(2)
+```
+
+Create an Index on name then see the response again
+```
+db.people.createIndex({"last_name": 1})
+```
+
+What if this is a prefixed query
+```
+db.people.find({"last_name":/^T/}, {_id:0, last_name:1}).explain(2)
+```
+
+What if it is case insensitive
+```
+db.people.find({"last_name":/^u/i}, {_id:0, last_name:1}).explain(2)
+```
+
+Text Indexes
+* Works a bit differently
+* One per collection
+* Concept of Tokenisation using suffix stemming
+* Doesn't support Regex
+
+```
+db.people.createIndex(
+   {
+     first_name: "text",
+     last_name: "text",
+     quote: "text",
+     job: "text"
+   }
+ )
+```
+
+Ex:
+```
+db.people.find( { $text: { $search: "Tucker" } }, {_id:0, last_name:1} ).explain(2)
+
+
+```
+
+
 ## Atlas ngram
+
+## Array Indexes
 
 
 
