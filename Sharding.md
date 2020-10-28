@@ -240,3 +240,15 @@ Sort ==> Pushes down each node and then performs a merge sort at mongos layer
 Limit  ==> Pushes down each cluster and reapplies those limit again afterwards
 Skip ==> Performed only on the mongos layer after we have the merged results
 [Details on Aggregation](https://docs.mongodb.com/manual/core/aggregation-pipeline-sharded-collections/)
+
+Prefix concepts of indexes applies in shard key selection while routing
+Ex: {a: 1, b:10: c:50}
+
+How to check whether it was targeted query or a braodcast
+Run an explain plan
+* Check for SINGLE_SHARD and SHARD_MERGE
+
+## Zone Sharding
+[Link](https://docs.mongodb.com/manual/core/zone-sharding/)
+
+
