@@ -63,8 +63,7 @@ Gives basic information about the sharded cluster. All these data is actually st
 
 Switch to config DB
 ```
-use config
-```
+show ```
 
 ```
 show collections
