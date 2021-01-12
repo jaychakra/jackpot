@@ -12,6 +12,16 @@
 * It is just a routing layer. The logic to route the query depends on metadata, 
 * We have config servers which saves the metadata information about sharded cluster. 
 * mongos is heavily dependent on config servers hence we generally deploy config servers as a replicated servers for achieving high availability  
+* Where to install mongos?
+  On Atlas, it is installed in each node
+  On Prem we can have several options
+      * Similar to Atlas
+      * Install the process alongside the application [Best Approach]
+* How is the query routed when we have multiple mongos?
+  (Using Server Selection Algorithm)[https://docs.mongodb.com/manual/core/read-preference-mechanics/#read-preference-for-sharded-clusters]
+
+
+  
 
 # When to shard
 ## Indicators
@@ -23,13 +33,13 @@ Audit if it is economically viable to scale
 If you reach a dead end
 Ex: 10X cost increase gives you a performance boost of 2X
 
-* Operational Complexity (20TB)
+* Operational Complexity (5TB)
     * Higher data volume has direct impact on initial sync and backups and restore
     * Can be infrequent operations but can become operational issue when used
     * More disk usage ==> More indexes  ==> More RAM Usages 
     
 ## General rule of Thumb
-* Individual Servers should contain 2-5TB of data
+* Individual Servers are reaching around 2TB of uncompressed data
 * Geographical Distributed data
 * Single thread operations ==> Aggregation command (Not all steps can be parallelized)
 
@@ -37,7 +47,7 @@ Ex: 10X cost increase gives you a performance boost of 2X
 Config servers need metadata in case if some shards grow big then data can be moved from one shard to another
 
 ## Primary Shard
-* Every collection is assigned a priamry shard in a a sharded cluster which contains unsharded data. 
+* Every collection is assigned a primary shard in a sharded cluster which contains unsharded data. 
 * This can be moved later on
     
 * SHARD_MERGE at MongoS or any randomly choseen shard in cluster
@@ -63,8 +73,11 @@ Gives basic information about the sharded cluster. All these data is actually st
 
 Switch to config DB
 ```
-show ```
+use config
 
+```
+
+What is all in there?
 ```
 show collections
 ```
@@ -149,7 +162,7 @@ Ex:
 state, dayOfWeek, mongoEmployee(T/F)
 
 ### Frequency
-* How often unique values exisit in our data
+* How often unique values exist in our data
 * High frequency ==> High repetition of a given unique shard key value
 Ex: 90% of data insertion of shardKey whose value is NY  ==> Lead to hotspot
 Recommendation ==> Low frequency
@@ -210,11 +223,15 @@ db.settings.save({_id: "chunksize", value: 2 })
 * Once marked as jumbo chunks balancers skips these chunks and avoid trying to move them
 * In some cases these will not even split
 * Strictly consider the frequency aspect of shard key to avoid the problems of JumboChunk
+
+Q. Can Jumbo Chunk have more than 1 document? Yes
+The idea is that 
+The most common scenario is when a chunk represents a single shard key value
  
 # Balancing
 * MongoDB balancer identifies which shards has more number of chunks and automatically moves the chunk from one node to another
 * Balancer runs on the primary member of config replica set
-* It checks the chunk distribution of data across the sharded cluster and looks for certain migration threshold
+* It checks the chunk distribution of sdata across the sharded cluster and looks for certain migration threshold
 * If imbalance detected, it initiates a balancer round
 * A given shard can't particitpate in more than one chunk migration at a time
 * It runs in parallel
@@ -249,5 +266,3 @@ Run an explain plan
 
 ## Zone Sharding
 [Link](https://docs.mongodb.com/manual/core/zone-sharding/)
-
-
