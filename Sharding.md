@@ -18,7 +18,7 @@
       * Similar to Atlas
       * Install the process alongside the application [Best Approach]
 * How is the query routed when we have multiple mongos?
-  (Using Server Selection Algorithm)[https://docs.mongodb.com/manual/core/read-preference-mechanics/#read-preference-for-sharded-clusters]
+  [Using Server Selection Algorithm](https://docs.mongodb.com/manual/core/read-preference-mechanics/#read-preference-for-sharded-clusters)
 
 
   
