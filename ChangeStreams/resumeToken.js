@@ -1,5 +1,5 @@
 const { MongoClient } = require("mongodb");
-const uri = "mongodb+srv://U:P@D?writeConcern=majority";
+const uri = "mongodb+srv://root:root@realm.qo3dr.mongodb.net";
 
 const test = async () => {
     console.log("Initializing");

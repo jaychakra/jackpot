@@ -1,6 +1,6 @@
 const { MongoClient } = require("mongodb");
 // Replace the uri string with your MongoDB deployment's connection string.
-const uri = "mongodb+srv://U:P@cD?writeConcern=majority";
+const uri = "mongodb+srv://root:root@realm.qo3dr.mongodb.net";
 
 const client = new MongoClient(uri);
 let changeStream;
